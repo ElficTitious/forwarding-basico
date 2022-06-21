@@ -32,6 +32,9 @@ if __name__ == '__main__':
     # Hacemos que el socket escuche de forma no bloqueante en el par (router_IP, router_port)
     conn_socket.bind((router_IP, router_port))
 
+    # Instanciamos una tabla de ruteo de tipo RoundRobinRoutingTable
+    round_robin_routing_table = RoundRobinRoutingTable(routing_table_file_name)
+
     # Recibimos paquetes de forma indefinida
     while True:
       
@@ -41,14 +44,23 @@ if __name__ == '__main__':
       # Parseamos su contenido
       ip_header = parse_ip_header(ip_header_buffer.decode())
 
+      # Si el TTL del paquete es menor o igual a 0, luego ignoramos el paquete y 
+      # seguimos a la siguiente iteración (puede ser menor a cero si se inicializa
+      # un paquete con un número negativo --lo cual es un error pero lo prevenimos
+      # igualmente--)
+      if ip_header.ttl <= 0:
+        continue
+
       # Si el mensaje es para este router, imprimimos en pantalla el mensaje
       if ip_header.ip_address == router_IP and ip_header.port == router_port:
         print(ip_header.msg)
 
       # De lo contrario buscamos como redirigir en la tabla de rutas
       else:
-        forward_address = traverse_routing_table(
-          routing_table_file_name,
+
+        # Generamos el siguiente salto
+        forward_address = next_hop(
+          round_robin_routing_table,
           (ip_header.ip_address, ip_header.port)
         )
 
@@ -64,8 +76,11 @@ if __name__ == '__main__':
                 (ip_header.ip_address, ip_header.port), 'desde', (router_IP, router_port),
                 'hacia', forward_address)
 
+          # Decrementamos el TTL
+          ip_header.ttl -= 1
+
           # Para finalmente realizar la redirección
-          conn_socket.sendto(ip_header_buffer, forward_address)
+          conn_socket.sendto(ip_header.to_string().encode(), forward_address)
 
 
 
