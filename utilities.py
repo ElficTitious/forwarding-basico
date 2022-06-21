@@ -11,6 +11,7 @@ class IPHeader:
                     de destino del paquete.
   port (int): Puerto en que se encuentra escuchando el router de destino
               del paquete en la IP ip_address.
+  ttl (int): Time To Live.
   msg (str): Mensaje siendo enviado en el paquete.
   """
 
