@@ -1,6 +1,6 @@
 # Actividad: Forwarding Básico
 
-Semana 6-7: Redes IP, Módulo 4: Redes y Ruteo, CC4303-1
+Semana 10-11: Redes IP, Módulo 4: Redes y Ruteo, CC4303-1
 
 ## Ejecución
 
