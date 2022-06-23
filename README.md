@@ -9,7 +9,7 @@ Cada router necesita como argumentos la IP del router y su puerto, sumado al nom
 
 Adicionalmente es posible probar el funcionamiento del sistema ejecutando el archivo `prueba_router.py` con los headers asociados al destino de los paquetes a enviar (los cuales deben ser de la forma `[IP_destino],[puerto_destino],[TTL]`), y la dirección del router de inicio. Con lo cual se envían todas las lineas en `test_file.txt` sumado a los headers, a la dirección de destino.
 
-**Ejecución:
+**Ejecución:**
 
 Para correr cada router se debe pasar la IP del router y su puerto, sumado al nombre del archivo en que se encuentran sus tablas de ruta.
 
